@@ -1,16 +1,15 @@
-package jp.poncon.twittanu;
+package jp.conpon.twittanu;
 
 import android.app.Activity;
 import android.os.Bundle;
 
 /**
- * Created by Shigure on 2016/08/12.
+ * Created by mirage-residence on 2016/08/13.
  */
-public class MainActivity extends Activity{
+public class TwitterOAuthActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_twitter_oauth);
     }
 }
