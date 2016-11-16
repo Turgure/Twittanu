@@ -46,7 +46,9 @@ public class TwitterOAuthActivity extends Activity {
             @Override
             protected String doInBackground(Void... voids) {
                 try {
-                    requestToken = twitter.getOAuthRequestToken(callbackURL);
+                    if(requestToken == null) {
+                        requestToken = twitter.getOAuthRequestToken(callbackURL);
+                    }
                     return requestToken.getAuthorizationURL();
                 } catch (TwitterException e) {
                     e.printStackTrace();
