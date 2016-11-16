@@ -61,8 +61,8 @@ public class TwitterUtils {
      */
     public static AccessToken loadAccessToken(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        String token = preferences.getString(context.getString(R.string.token), null);
-        String tokenSecret = preferences.getString(context.getString(R.string.token_secret), null);
+        String token = preferences.getString(TOKEN, null);
+        String tokenSecret = preferences.getString(TOKEN_SECRET, null);
         if (token != null && tokenSecret != null) {
             return new AccessToken(token, tokenSecret);
         } else {
