@@ -1,11 +1,13 @@
 package jp.conpon.twittanu;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
+import android.os.AsyncTask;
 
+import twitter4j.Status;
 import twitter4j.Twitter;
+import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 
@@ -16,6 +18,25 @@ public class TwitterUtils {
     private static final String TOKEN = "token";
     private static final String TOKEN_SECRET = "token_secret";
     private static final String PREF_NAME = "twitter_access_token";
+
+    private static AccessToken accessToken;
+    private static Twitter twitter;
+    private static Activity activity;
+
+    /**
+     * コンストラクタ
+     * ツイッター情報を取得します。
+     *
+     * @param activity
+     */
+    public TwitterUtils(Activity activity) {
+        this.activity = activity;
+        accessToken = loadAccessToken(activity.getApplicationContext());
+
+        if (accessToken != null) {
+            twitter = getTwitterInstance(activity.getApplicationContext());
+        }
+    }
 
     /**
      * Twitterインスタンスを取得します。アクセストークンが保存されていれば自動的にセットします。
@@ -28,7 +49,7 @@ public class TwitterUtils {
         String consumerSecret = context.getString(R.string.api_secret);
 
         TwitterFactory factory = new TwitterFactory();
-        Twitter twitter = factory.getInstance();
+        twitter = factory.getInstance();
         twitter.setOAuthConsumer(consumerKey, consumerSecret);
 
         AccessToken accessToken = loadAccessToken(context);
@@ -68,5 +89,37 @@ public class TwitterUtils {
         } else {
             return null;
         }
+    }
+
+    /**
+     * ログインしているかを確認します。
+     *
+     * @return
+     */
+    public static boolean isLogined() {
+        return accessToken != null;
+    }
+
+    /**
+     * 文章をツイートします。
+     *
+     * @param str
+     * @return
+     */
+    public static void tweet(final String str) {
+        AsyncTask<String, Void, Boolean> task = new AsyncTask<String, Void, Boolean>() {
+            @Override
+            protected Boolean doInBackground(String... strings) {
+                twitter4j.Status status = null;
+                try {
+                    status = twitter.updateStatus(str);
+                    return true;
+                } catch (TwitterException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+        };
+        task.execute();
     }
 }

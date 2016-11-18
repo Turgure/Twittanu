@@ -32,6 +32,16 @@
                 <data android:scheme="twittanu" android:host="twitter" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="jp.conpon.twittanu.TweetActivity"
+            android:launchMode="singleTask">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
