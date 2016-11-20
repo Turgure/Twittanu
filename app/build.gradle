@@ -5,9 +5,9 @@ android {
     buildToolsVersion "24.0.1"
 
     defaultConfig {
-        applicationId "jp.poncon.twittanu"
+        applicationId "jp.conpon.twittanu"
         minSdkVersion 17
-        targetSdkVersion 19
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
@@ -20,9 +20,11 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile files('libs/twitter4j-core-4.0.4.jar')
     compile files('libs/twitter4j-async-4.0.4.jar')
+    compile files('libs/twitter4j-media-support-4.0.4.jar')
+    compile files('libs/twitter4j-stream-4.0.4.jar')
 }

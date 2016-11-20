@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Twittanu</string>
+    <string name="twitter_callback_url">twittanu://twitter</string>
 </resources>
