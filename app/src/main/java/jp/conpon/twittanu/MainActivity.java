@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import twitter4j.auth.AccessToken;
-
 /**
  * Created by Shigure on 2016/08/12.
  */
@@ -15,7 +13,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (!TwitterUtils.INSTANCE.isLoggedIn()) {
+        if (!TwitterManager.INSTANCE.isLoggedIn()) {
             Intent intent = new Intent(MainActivity.this, TwitterOAuthActivity.class);
             startActivity(intent);
             finish();

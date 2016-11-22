@@ -17,7 +17,7 @@ import static jp.conpon.twittanu.BaseActivity.context;
 /**
  * Created by Shigure on 2016/08/13.
  */
-public enum TwitterUtils {
+public enum TwitterManager {
     INSTANCE;
     private String callbackURL;
     private AccessToken accessToken;
@@ -28,7 +28,7 @@ public enum TwitterUtils {
      * コンストラクタ
      * ツイッター情報を取得
      */
-    private TwitterUtils() {
+    private TwitterManager() {
         callbackURL = context.getString(R.string.twitter_callback_url);
 
         initTwitterInstance();

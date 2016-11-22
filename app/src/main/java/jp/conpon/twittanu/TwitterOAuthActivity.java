@@ -17,13 +17,13 @@ public class TwitterOAuthActivity extends Activity {
         findViewById(R.id.action_start_oauth).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TwitterUtils.INSTANCE.startAuthorize(TwitterOAuthActivity.this);
+                TwitterManager.INSTANCE.startAuthorize(TwitterOAuthActivity.this);
             }
         });
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
-        TwitterUtils.INSTANCE.callback(TwitterOAuthActivity.this, intent);
+        TwitterManager.INSTANCE.callback(TwitterOAuthActivity.this, intent);
     }
 }
