@@ -17,14 +17,12 @@ import static jp.conpon.twittanu.BaseActivity.context;
 /**
  * Created by Shigure on 2016/08/13.
  */
-public class TwitterUtils {
-    private static String callbackURL;
-
-    private static TwitterUtils twitterUtils = new TwitterUtils();
-
-    private static AccessToken accessToken;
-    private static RequestToken requestToken;
-    private static Twitter twitter;
+public enum TwitterUtils {
+    INSTANCE;
+    private String callbackURL;
+    private AccessToken accessToken;
+    private RequestToken requestToken;
+    private Twitter twitter;
 
     /**
      * コンストラクタ
@@ -38,15 +36,6 @@ public class TwitterUtils {
         if (accessToken != null) {
             login();
         }
-    }
-
-    /**
-     * インスタンス取得
-     *
-     * @return
-     */
-    public static TwitterUtils getInstance() {
-        return twitterUtils;
     }
 
     /**
@@ -183,8 +172,8 @@ public class TwitterUtils {
      * @param accessToken
      */
     private void storeAccessToken(AccessToken accessToken) {
-        MyPreference.getInstance().put(MyPreference.TWITTER_ACCESS_TOKEN, accessToken.getToken());
-        MyPreference.getInstance().put(MyPreference.TWITTER_ACCESS_TOKEN_SECRET, accessToken.getTokenSecret());
+        MyPreference.INSTANCE.put(MyPreference.TWITTER_ACCESS_TOKEN, accessToken.getToken());
+        MyPreference.INSTANCE.put(MyPreference.TWITTER_ACCESS_TOKEN_SECRET, accessToken.getTokenSecret());
     }
 
     /**
@@ -193,8 +182,8 @@ public class TwitterUtils {
      * @return
      */
     private void loadAccessToken() {
-        String token = MyPreference.getInstance().get(MyPreference.TWITTER_ACCESS_TOKEN, null);
-        String tokenSecret = MyPreference.getInstance().get(MyPreference.TWITTER_ACCESS_TOKEN_SECRET, null);
+        String token = MyPreference.INSTANCE.get(MyPreference.TWITTER_ACCESS_TOKEN, null);
+        String tokenSecret = MyPreference.INSTANCE.get(MyPreference.TWITTER_ACCESS_TOKEN_SECRET, null);
         if (token != null && tokenSecret != null) {
             accessToken = new AccessToken(token, tokenSecret);
         } else {

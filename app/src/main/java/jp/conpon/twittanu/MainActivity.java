@@ -15,7 +15,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (!TwitterUtils.getInstance().isLoggedIn()) {
+        if (!TwitterUtils.INSTANCE.isLoggedIn()) {
             Intent intent = new Intent(MainActivity.this, TwitterOAuthActivity.class);
             startActivity(intent);
             finish();

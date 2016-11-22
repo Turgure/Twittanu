@@ -9,9 +9,10 @@ import static jp.conpon.twittanu.BaseActivity.context;
  * アプリの設定保存クラス
  * Created by shigure on 2016/11/22.
  */
-public class MyPreference {
-    private static MyPreference myPreference = new MyPreference(context);
-    private static SharedPreferences sharedPreferences;
+public enum MyPreference {
+    INSTANCE;
+
+    private SharedPreferences sharedPreferences;
 
     // keys
     public static final String PREF_NAME = "user_data";
@@ -20,20 +21,9 @@ public class MyPreference {
 
     /**
      * コンストラクタ
-     *
-     * @param context
      */
-    private MyPreference(Context context) {
+    private MyPreference() {
         sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-    }
-
-    /**
-     * インスタンス取得
-     *
-     * @return
-     */
-    public static MyPreference getInstance(){
-        return myPreference;
     }
 
     /**

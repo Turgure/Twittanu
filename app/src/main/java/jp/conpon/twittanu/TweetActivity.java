@@ -18,7 +18,7 @@ public class TweetActivity extends Activity {
         findViewById(R.id.tweet_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TwitterUtils.getInstance().tweet(((EditText) findViewById(R.id.tweet_content)).getText().toString());
+                TwitterUtils.INSTANCE.tweet(((EditText) findViewById(R.id.tweet_content)).getText().toString());
                 Toast.makeText(getApplicationContext(), "ツイートしたよ！", Toast.LENGTH_SHORT).show();
                 finish();
             }
