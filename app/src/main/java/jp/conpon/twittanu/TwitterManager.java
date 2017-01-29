@@ -82,7 +82,7 @@ public enum TwitterManager {
                 try {
                     accessToken = twitter.getOAuthAccessToken(requestToken, strings[0]);
                     return accessToken;
-                } catch (TwitterException e) {
+                } catch (TwitterException | NullPointerException e) {
                     e.printStackTrace();
                 }
                 return null;
