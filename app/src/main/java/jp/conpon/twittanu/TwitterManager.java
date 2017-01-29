@@ -49,9 +49,7 @@ public enum TwitterManager {
             protected String doInBackground(Void... voids) {
                 try {
                     twitter.setOAuthAccessToken(null);
-                    if (requestToken == null) {
-                        requestToken = twitter.getOAuthRequestToken(callbackURL);
-                    }
+                    requestToken = twitter.getOAuthRequestToken(callbackURL);
                     return requestToken.getAuthorizationURL();
                 } catch (TwitterException e) {
                     e.printStackTrace();
