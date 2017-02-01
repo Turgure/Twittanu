@@ -2,11 +2,78 @@
 <jp.conpon.twittanu.TimelineItemLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
-	android:layout_height="wrap_content">
+	android:layout_height="wrap_content"
+	android:paddingBottom="8dp"
+	android:paddingEnd="8dp"
+	android:paddingStart="8dp"
+	android:paddingTop="8dp">
+
+	<ImageView
+		android:id="@+id/user_icon"
+		android:layout_width="64dp"
+		android:layout_height="64dp"
+		android:contentDescription="icon"
+		android:scaleType="centerInside"
+		android:src="@mipmap/ic_launcher" />
+
+	<TextView
+		android:id="@+id/user_name"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignTop="@id/user_icon"
+		android:layout_marginStart="16dp"
+		android:layout_toEndOf="@id/user_icon"
+		android:ellipsize="end"
+		android:maxLines="1" />
 
 	<TextView
 		android:id="@+id/content"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_alignStart="@id/user_name"
+		android:layout_below="@id/user_name"
+		android:layout_marginTop="8dp"
 		android:autoLink="web" />
+
+	<TextView
+		android:id="@+id/created_time"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignStart="@id/content"
+		android:layout_below="@id/content"
+		android:layout_marginTop="8dp" />
+
+	<TextView
+		android:id="@+id/title_retweet"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignStart="@id/created_time"
+		android:layout_below="@id/created_time"
+		android:layout_marginTop="8dp"
+		android:text="RT:" />
+
+	<TextView
+		android:id="@+id/retweet_count"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignTop="@id/title_retweet"
+		android:layout_toEndOf="@id/title_retweet"
+		android:minWidth="64dp" />
+
+	<TextView
+		android:id="@+id/title_fav"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignTop="@id/retweet_count"
+		android:layout_marginStart="16dp"
+		android:layout_toEndOf="@id/retweet_count"
+		android:text="fav:" />
+
+	<TextView
+		android:id="@+id/fav_count"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignTop="@id/title_fav"
+		android:layout_toEndOf="@id/title_fav"
+		android:minWidth="64dp" />
 </jp.conpon.twittanu.TimelineItemLayout>
