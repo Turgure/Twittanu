@@ -78,6 +78,8 @@ public class TweetActivity extends Activity {
                 double scale = Resources.getSystem().getDisplayMetrics().widthPixels / 4.0 / bitmap.getWidth();
                 bitmap = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth() * scale), (int)(bitmap.getHeight() * scale), true);
                 image.setImageBitmap(bitmap);
+
+                tweetBtn.setEnabled(true);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -95,14 +97,19 @@ public class TweetActivity extends Activity {
 
         @Override
         public void afterTextChanged(Editable s) {
-            if (tweetBtn.isEnabled()) {
-                if (s.length() == 0) {
-                    tweetBtn.setEnabled(false);
+            if(imagePath == null) {
+                if (tweetBtn.isEnabled()) {
+                    if (s.length() == 0) {
+                        tweetBtn.setEnabled(false);
+                    }
+                } else {
+                    if (s.length() > 0) {
+                        tweetBtn.setEnabled(true);
+                    }
                 }
-            } else {
-                if (s.length() > 0) {
-                    tweetBtn.setEnabled(true);
-                }
+            }
+            else {
+                tweetBtn.setEnabled(true);
             }
         }
     };
