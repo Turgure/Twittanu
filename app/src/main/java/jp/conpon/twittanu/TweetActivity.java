@@ -3,9 +3,12 @@ package jp.conpon.twittanu;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -13,6 +16,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import java.io.File;
 
 /**
  * Created by shigure on 2016/11/19.
@@ -24,6 +29,7 @@ public class TweetActivity extends Activity {
     private Button tweetBtn;
     private Button imageBtn;
     private ImageView image;
+    private String imagePath = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +46,7 @@ public class TweetActivity extends Activity {
         tweetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TwitterManager.INSTANCE.tweet(tweetContent.getText().toString());
+                TwitterManager.INSTANCE.tweet(tweetContent.getText().toString(), imagePath);
                 Toast.makeText(getApplicationContext(), "ツイートしたよ！", Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -63,6 +69,12 @@ public class TweetActivity extends Activity {
 
         if(resultCode == RESULT_OK && requestCode == REQUEST_GALLEY){
             try{
+                String[] projection = {MediaStore.Images.Media.DATA};
+                Cursor c = this.getContentResolver().query(data.getData(), projection, null, null, null);
+                if(c.moveToFirst()) {
+                    imagePath = c.getString(0);
+                }
+
                 Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(data.getData()));
                 double scale = Resources.getSystem().getDisplayMetrics().widthPixels / 4.0 / bitmap.getWidth();
                 bitmap = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth() * scale), (int)(bitmap.getHeight() * scale), true);
