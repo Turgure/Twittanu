@@ -13,11 +13,25 @@
         android:hint="いまどうしてる？"
         android:inputType="textMultiLine" />
 
-    <Button
-        android:id="@+id/tweet_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:enabled="false"
-        android:text="ツイート" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="right">
+
+        <Button
+            android:id="@+id/tweet_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="画像を添付" />
+
+
+        <Button
+            android:id="@+id/tweet_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="ツイート" />
+
+    </LinearLayout>
 </LinearLayout>

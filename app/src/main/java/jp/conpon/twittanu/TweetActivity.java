@@ -1,7 +1,11 @@
 package jp.conpon.twittanu;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -9,12 +13,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 /**
  * Created by shigure on 2016/11/19.
  */
 public class TweetActivity extends Activity {
+    private static final int REQUEST_GALLEY = 0;
+
     private EditText tweetContent;
     private Button tweetBtn;
+    private Button imageBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +33,7 @@ public class TweetActivity extends Activity {
 
         tweetContent = (EditText) findViewById(R.id.tweet_content);
         tweetBtn = (Button) findViewById(R.id.tweet_button);
+        imageBtn = (Button) findViewById(R.id.tweet_image);
 
         tweetContent.addTextChangedListener(watcher);
 
@@ -32,6 +43,16 @@ public class TweetActivity extends Activity {
                 TwitterManager.INSTANCE.tweet(tweetContent.getText().toString());
                 Toast.makeText(getApplicationContext(), "ツイートしたよ！", Toast.LENGTH_SHORT).show();
                 finish();
+            }
+        });
+
+        imageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivity(intent);
             }
         });
     }
