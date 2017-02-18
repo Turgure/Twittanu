@@ -127,6 +127,16 @@ public enum TwitterManager {
                     return false;
                 }
             }
+
+            @Override
+            protected void onPostExecute(Boolean result) {
+                if(result){
+                    showToast("ツイートしたよ！");
+                }
+                else{
+                    showToast("ツイート失敗…");
+                }
+            }
         };
         task.execute();
     }

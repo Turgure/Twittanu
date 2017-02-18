@@ -47,7 +47,6 @@ public class TweetActivity extends Activity {
             @Override
             public void onClick(View view) {
                 TwitterManager.INSTANCE.tweet(tweetContent.getText().toString(), imagePath);
-                Toast.makeText(getApplicationContext(), "ツイートしたよ！", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
