@@ -6,6 +6,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import java.io.File;
+
+import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -105,17 +108,33 @@ public enum TwitterManager {
      * @param str
      * @return
      */
-    public void tweet(final String str) {
+    public void tweet(final String str, final String imagePath) {
         AsyncTask<String, Void, Boolean> task = new AsyncTask<String, Void, Boolean>() {
             @Override
             protected Boolean doInBackground(String... strings) {
                 twitter4j.Status status = null;
+                StatusUpdate statusUpdate = new StatusUpdate(str);
+
+                if(imagePath != null){
+                    statusUpdate.media(new File(imagePath));
+                }
+
                 try {
-                    status = twitter.updateStatus(str);
+                    status = twitter.updateStatus(statusUpdate);
                     return true;
                 } catch (TwitterException e) {
                     e.printStackTrace();
                     return false;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Boolean result) {
+                if(result){
+                    showToast("ツイートしたよ！");
+                }
+                else{
+                    showToast("ツイート失敗…");
                 }
             }
         };
