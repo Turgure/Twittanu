@@ -2,19 +2,17 @@ package jp.conpon.twittanu;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
-
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 
 /**
  * Created by shigure on 2016/11/19.
@@ -25,6 +23,7 @@ public class TweetActivity extends Activity {
     private EditText tweetContent;
     private Button tweetBtn;
     private Button imageBtn;
+    private ImageView image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +32,8 @@ public class TweetActivity extends Activity {
 
         tweetContent = (EditText) findViewById(R.id.tweet_content);
         tweetBtn = (Button) findViewById(R.id.tweet_button);
-        imageBtn = (Button) findViewById(R.id.tweet_image);
+        imageBtn = (Button) findViewById(R.id.tweet_image_button);
+        image = (ImageView) findViewById(R.id.tweet_image);
 
         tweetContent.addTextChangedListener(watcher);
 
@@ -52,9 +52,25 @@ public class TweetActivity extends Activity {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_PICK);
                 intent.setType("image/*");
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_GALLEY);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == RESULT_OK && requestCode == REQUEST_GALLEY){
+            try{
+                Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(data.getData()));
+                double scale = Resources.getSystem().getDisplayMetrics().widthPixels / 4.0 / bitmap.getWidth();
+                bitmap = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth() * scale), (int)(bitmap.getHeight() * scale), true);
+                image.setImageBitmap(bitmap);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private TextWatcher watcher = new TextWatcher() {
