@@ -4,19 +4,45 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/tweet_content"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:ems="10"
-        android:gravity="top|left"
-        android:hint="いまどうしてる？"
-        android:inputType="textMultiLine" />
-
-    <Button
-        android:id="@+id/tweet_button"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:text="ツイート" />
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/tweet_content"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:ems="10"
+            android:gravity="top|left"
+            android:hint="いまどうしてる？"
+            android:inputType="textMultiLine" />
+
+        <ImageView
+            android:id="@+id/tweet_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="right">
+
+        <Button
+            android:id="@+id/tweet_image_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="画像を添付" />
+
+
+        <Button
+            android:id="@+id/tweet_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="ツイート" />
+
+    </LinearLayout>
 </LinearLayout>
