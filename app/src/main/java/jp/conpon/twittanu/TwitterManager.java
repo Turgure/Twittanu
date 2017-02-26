@@ -5,10 +5,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.widget.Toast;
-
 import java.io.File;
-
 import twitter4j.StatusUpdate;
+import twitter4j.ResponseList;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -101,6 +100,18 @@ public enum TwitterManager {
         };
         task.execute(verifier);
     }
+
+	public ResponseList<twitter4j.Status> getHomeTimeline() {
+		ResponseList<twitter4j.Status> list = null;
+
+		try {
+			list = twitter.getHomeTimeline();
+		} catch (TwitterException e) {
+			e.printStackTrace();
+		}
+
+		return list;
+	}
 
     /**
      * ツイート！
