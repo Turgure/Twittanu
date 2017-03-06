@@ -4,21 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.Toast;
-
-import java.io.File;
 
 /**
  * Created by shigure on 2016/11/19.
@@ -29,8 +21,7 @@ public class TweetActivity extends Activity {
     private EditText tweetContent;
     private Button tweetBtn;
     private Button imageBtn;
-    private UrlImageView image;
-    private String imagePath = null;
+    private UrlImageView[] images;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +31,17 @@ public class TweetActivity extends Activity {
         tweetContent = (EditText) findViewById(R.id.tweet_content);
         tweetBtn = (Button) findViewById(R.id.tweet_button);
         imageBtn = (Button) findViewById(R.id.tweet_image_button);
-        image = (UrlImageView) findViewById(R.id.tweet_image);
+        images = new UrlImageView[4];
+        for (int i = 0; i < 4; ++i) {
+            images[i] = (UrlImageView) findViewById(getResources().getIdentifier("tweet_image" + (i + 1), "id", getPackageName()));
+        }
 
         tweetContent.addTextChangedListener(watcher);
 
         tweetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TwitterManager.INSTANCE.tweet(tweetContent.getText().toString(), image.getUrl());
+                TwitterManager.INSTANCE.tweet(tweetContent.getText().toString(), images);
                 finish();
             }
         });
@@ -67,18 +61,21 @@ public class TweetActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == RESULT_OK && requestCode == REQUEST_GALLEY){
-            try{
-                String[] projection = {MediaStore.Images.Media.DATA};
-                Cursor c = this.getContentResolver().query(data.getData(), projection, null, null, null);
-                if(c.moveToFirst()) {
-                    imagePath = c.getString(0);
+        if (resultCode == RESULT_OK && requestCode == REQUEST_GALLEY) {
+            try {
+                String path;
+                Cursor c = this.getContentResolver().query(data.getData(), new String[]{MediaStore.Images.Media.DATA}, null, null, null);
+                if (c.moveToFirst()) {
+                    path = c.getString(0);
+                    for (UrlImageView image : images) {
+                        if (image.getUrl() == null) {
+                            image.setImage(path);
+                            image.changeScale(Resources.getSystem().getDisplayMetrics().widthPixels / 4.0 / image.getBitmap().getWidth());
+                            break;
+                        }
+                    }
+                    tweetBtn.setEnabled(true);
                 }
-
-                image.setImage(imagePath);
-                image.changeScale(Resources.getSystem().getDisplayMetrics().widthPixels / 4.0 / image.getBitmap().getWidth());
-
-                tweetBtn.setEnabled(true);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -96,7 +93,7 @@ public class TweetActivity extends Activity {
 
         @Override
         public void afterTextChanged(Editable s) {
-            if(imagePath == null) {
+            if (images[0].getUrl() == null) {
                 if (tweetBtn.isEnabled()) {
                     if (s.length() == 0) {
                         tweetBtn.setEnabled(false);
@@ -106,8 +103,7 @@ public class TweetActivity extends Activity {
                         tweetBtn.setEnabled(true);
                     }
                 }
-            }
-            else {
+            } else {
                 tweetBtn.setEnabled(true);
             }
         }

@@ -16,27 +16,23 @@ import java.net.URL;
  */
 
 public class UrlImageView extends ImageView {
-    private String url;
+    private String url = null;
     private Bitmap bitmap;
 
     public UrlImageView(Context context) {
         super(context);
-        this.url = url;
     }
 
     public UrlImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.url = url;
     }
 
     public UrlImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.url = url;
     }
 
     public UrlImageView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        this.url = url;
     }
 
     public void setImage(@NonNull String url) {
@@ -44,21 +40,20 @@ public class UrlImageView extends ImageView {
     }
 
     public void setImage(@NonNull String url, double scale) {
-        if (!url.isEmpty()) {
-            if (url.startsWith("http")) {
-                InputStream istream = null;
-                try {
-                    istream = new URL(url).openStream();
-                    bitmap = BitmapFactory.decodeStream(istream);
-                    changeScale(scale);
-                    istream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                bitmap = BitmapFactory.decodeFile(url);
+        this.url = url;
+        if (url.startsWith("http")) {
+            InputStream inputStream = null;
+            try {
+                inputStream = new URL(url).openStream();
+                bitmap = BitmapFactory.decodeStream(inputStream);
                 changeScale(scale);
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+        } else {
+            bitmap = BitmapFactory.decodeFile(url);
+            changeScale(scale);
         }
     }
 

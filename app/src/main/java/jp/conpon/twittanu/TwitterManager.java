@@ -6,11 +6,14 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.widget.Toast;
 import java.io.File;
+import java.util.ArrayList;
+
 import twitter4j.StatusUpdate;
 import twitter4j.ResponseList;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
+import twitter4j.UploadedMedia;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 
@@ -119,18 +122,30 @@ public enum TwitterManager {
      * @param str
      * @return
      */
-    public void tweet(final String str, final String imagePath) {
+    public void tweet(final String str, final UrlImageView[] imageViews) {
         AsyncTask<String, Void, Boolean> task = new AsyncTask<String, Void, Boolean>() {
             @Override
             protected Boolean doInBackground(String... strings) {
                 twitter4j.Status status = null;
                 StatusUpdate statusUpdate = new StatusUpdate(str);
 
-                if(imagePath != null){
-                    statusUpdate.media(new File(imagePath));
-                }
 
                 try {
+                    // 画像の添付
+                    ArrayList<Long> mediaIds = new ArrayList<>();
+                    UploadedMedia media;
+                    for(UrlImageView imageView : imageViews) {
+                        if (imageView.getUrl() != null) {
+                            media = twitter.uploadMedia(new File(imageView.getUrl()));
+                            mediaIds.add(media.getMediaId());
+                        }
+                    }
+                    long[] arrayMediaIds = new long[mediaIds.size()];
+                    for(int i = 0; i < arrayMediaIds.length; ++i){
+                        arrayMediaIds[i] = mediaIds.get(i);
+                    }
+                    statusUpdate.setMediaIds(arrayMediaIds);
+
                     status = twitter.updateStatus(statusUpdate);
                     return true;
                 } catch (TwitterException e) {
