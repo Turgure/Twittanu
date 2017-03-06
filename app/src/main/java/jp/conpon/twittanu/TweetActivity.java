@@ -70,7 +70,7 @@ public class TweetActivity extends Activity {
                     for (UrlImageView image : images) {
                         if (image.getUrl() == null) {
                             image.setImage(path);
-                            image.changeScale(Resources.getSystem().getDisplayMetrics().widthPixels / 4.0 / image.getBitmap().getWidth());
+                            image.changeScale(Resources.getSystem().getDisplayMetrics().widthPixels / 2.0 / image.getBitmap().getWidth());
                             break;
                         }
                     }

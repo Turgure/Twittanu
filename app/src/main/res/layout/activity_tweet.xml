@@ -1,69 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/tweet_content"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:ems="10"
-            android:gravity="top|left"
-            android:hint="いまどうしてる？"
-            android:inputType="textMultiLine" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <jp.conpon.twittanu.UrlImageView
-                android:id="@+id/tweet_image1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <jp.conpon.twittanu.UrlImageView
-                android:id="@+id/tweet_image2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <jp.conpon.twittanu.UrlImageView
-                android:id="@+id/tweet_image3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <jp.conpon.twittanu.UrlImageView
-                android:id="@+id/tweet_image4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-    </LinearLayout>
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:gravity="right">
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/tweet_image_button"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="画像を添付" />
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/tweet_content"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:ems="10"
+                android:gravity="top|left"
+                android:hint="いまどうしてる？"
+                android:inputType="textMultiLine" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow>
+                    <jp.conpon.twittanu.UrlImageView
+                        android:id="@+id/tweet_image1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <jp.conpon.twittanu.UrlImageView
+                        android:id="@+id/tweet_image2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </TableRow>
+
+                <TableRow>
+                    <jp.conpon.twittanu.UrlImageView
+                        android:id="@+id/tweet_image3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <jp.conpon.twittanu.UrlImageView
+                        android:id="@+id/tweet_image4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="right">
+
+            <Button
+                android:id="@+id/tweet_image_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="画像を添付" />
 
 
-        <Button
-            android:id="@+id/tweet_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="ツイート" />
+            <Button
+                android:id="@+id/tweet_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:text="ツイート" />
 
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</ScrollView>
