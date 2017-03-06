@@ -14,6 +14,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -28,7 +29,7 @@ public class TweetActivity extends Activity {
     private EditText tweetContent;
     private Button tweetBtn;
     private Button imageBtn;
-    private ImageView image;
+    private UrlImageView image;
     private String imagePath = null;
 
     @Override
@@ -39,14 +40,14 @@ public class TweetActivity extends Activity {
         tweetContent = (EditText) findViewById(R.id.tweet_content);
         tweetBtn = (Button) findViewById(R.id.tweet_button);
         imageBtn = (Button) findViewById(R.id.tweet_image_button);
-        image = (ImageView) findViewById(R.id.tweet_image);
+        image = (UrlImageView) findViewById(R.id.tweet_image);
 
         tweetContent.addTextChangedListener(watcher);
 
         tweetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TwitterManager.INSTANCE.tweet(tweetContent.getText().toString(), imagePath);
+                TwitterManager.INSTANCE.tweet(tweetContent.getText().toString(), image.getUrl());
                 finish();
             }
         });
@@ -74,10 +75,8 @@ public class TweetActivity extends Activity {
                     imagePath = c.getString(0);
                 }
 
-                Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(data.getData()));
-                double scale = Resources.getSystem().getDisplayMetrics().widthPixels / 4.0 / bitmap.getWidth();
-                bitmap = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth() * scale), (int)(bitmap.getHeight() * scale), true);
-                image.setImageBitmap(bitmap);
+                image.setImage(imagePath);
+                image.changeScale(Resources.getSystem().getDisplayMetrics().widthPixels / 4.0 / image.getBitmap().getWidth());
 
                 tweetBtn.setEnabled(true);
             } catch (Exception e) {

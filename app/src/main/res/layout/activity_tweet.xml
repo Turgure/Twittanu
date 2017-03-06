@@ -18,7 +18,7 @@
             android:hint="いまどうしてる？"
             android:inputType="textMultiLine" />
 
-        <ImageView
+        <jp.conpon.twittanu.UrlImageView
             android:id="@+id/tweet_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
