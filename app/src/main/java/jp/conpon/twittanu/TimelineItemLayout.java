@@ -16,8 +16,8 @@ import twitter4j.User;
 /**
  * Created by mirage-residence on 2017/01/25.
  */
-
 public class TimelineItemLayout extends RelativeLayout {
+	private UrlImageView userIcon;
 	private TextView userName;
 	private TextView content;
 	private TextView createdTime;
@@ -45,6 +45,7 @@ public class TimelineItemLayout extends RelativeLayout {
 	protected void onFinishInflate() {
 		super.onFinishInflate();
 
+		userIcon = (UrlImageView) findViewById(R.id.user_icon);
 		userName = (TextView) findViewById(R.id.user_name);
 		content = (TextView) findViewById(R.id.content);
 		createdTime = (TextView) findViewById(R.id.created_time);
@@ -55,6 +56,7 @@ public class TimelineItemLayout extends RelativeLayout {
 	public void bindView(@Nullable final twitter4j.Status status) {
 		if (status != null) {
 			User user = status.getUser();
+			userIcon.setImage(user.getProfileImageURL());
 
 			StringBuilder builder = new StringBuilder();
 			builder.append(user.getName());
