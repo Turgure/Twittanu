@@ -3,6 +3,7 @@ package jp.conpon.twittanu;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.widget.ImageView;
@@ -42,15 +43,23 @@ public class UrlImageView extends ImageView {
     public void setImage(@NonNull String url, double scale) {
         this.url = url;
         if (url.startsWith("http")) {
-            InputStream inputStream = null;
-            try {
-                inputStream = new URL(url).openStream();
-                bitmap = BitmapFactory.decodeStream(inputStream);
-                changeScale(scale);
-                inputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            AsyncTask<String, Void, Boolean> task = new AsyncTask<String, Void, Boolean>() {
+                @Override
+                protected Boolean doInBackground(String... strings) {
+                    InputStream inputStream = null;
+                    try {
+                        inputStream = new URL(strings[0]).openStream();
+                        bitmap = BitmapFactory.decodeStream(inputStream);
+                        changeScale(Double.parseDouble(strings[1]));
+                        inputStream.close();
+                        return true;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                }
+            };
+            task.execute(new String[]{url, String.valueOf(scale)});
         } else {
             bitmap = BitmapFactory.decodeFile(url);
             changeScale(scale);
