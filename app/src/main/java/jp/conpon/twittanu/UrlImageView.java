@@ -43,20 +43,24 @@ public class UrlImageView extends ImageView {
     public void setImage(@NonNull String url, double scale) {
         this.url = url;
         if (url.startsWith("http")) {
-            AsyncTask<String, Void, Boolean> task = new AsyncTask<String, Void, Boolean>() {
+            AsyncTask<String, Void, Double> task = new AsyncTask<String, Void, Double>() {
                 @Override
-                protected Boolean doInBackground(String... strings) {
+                protected Double doInBackground(String... strings) {
                     InputStream inputStream = null;
                     try {
                         inputStream = new URL(strings[0]).openStream();
                         bitmap = BitmapFactory.decodeStream(inputStream);
-                        changeScale(Double.parseDouble(strings[1]));
                         inputStream.close();
-                        return true;
+                        return Double.parseDouble(strings[1]);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        return false;
+                        return 1.0;
                     }
+                }
+
+                @Override
+                protected void onPostExecute(Double scale){
+                    changeScale(scale);
                 }
             };
             task.execute(new String[]{url, String.valueOf(scale)});
