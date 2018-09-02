@@ -16,7 +16,7 @@ import java.net.URL;
  * Created by shigure on 2017/03/06.
  */
 
-public class UrlImageView extends ImageView {
+public class UrlImageView extends android.support.v7.widget.AppCompatImageView {
     private String url = null;
     private Bitmap bitmap;
 
@@ -30,10 +30,6 @@ public class UrlImageView extends ImageView {
 
     public UrlImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    public UrlImageView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
     }
 
     public void setImage(@NonNull String url) {
@@ -63,7 +59,7 @@ public class UrlImageView extends ImageView {
                     changeScale(scale);
                 }
             };
-            task.execute(new String[]{url, String.valueOf(scale)});
+            task.execute(url, String.valueOf(scale));
         } else {
             bitmap = BitmapFactory.decodeFile(url);
             changeScale(scale);

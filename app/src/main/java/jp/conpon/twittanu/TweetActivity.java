@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -64,17 +65,22 @@ public class TweetActivity extends Activity {
         if (resultCode == RESULT_OK && requestCode == REQUEST_GALLEY) {
             try {
                 String path;
-                Cursor c = this.getContentResolver().query(data.getData(), new String[]{MediaStore.Images.Media.DATA}, null, null, null);
-                if (c.moveToFirst()) {
-                    path = c.getString(0);
-                    for (UrlImageView image : images) {
-                        if (image.getUrl() == null) {
-                            image.setImage(path);
-                            image.changeScale(Resources.getSystem().getDisplayMetrics().widthPixels / 2.0 / image.getBitmap().getWidth());
-                            break;
+                Uri uri = data.getData();
+
+                if(uri != null) {
+                    Cursor c = this.getContentResolver().query(uri, new String[]{MediaStore.Images.Media.DATA}, null, null, null);
+                    if (c != null && c.moveToFirst()) {
+                        path = c.getString(0);
+                        for (UrlImageView image : images) {
+                            if (image.getUrl() == null) {
+                                image.setImage(path);
+                                image.changeScale(Resources.getSystem().getDisplayMetrics().widthPixels / 2.0 / image.getBitmap().getWidth());
+                                break;
+                            }
                         }
+                        tweetBtn.setEnabled(true);
                     }
-                    tweetBtn.setEnabled(true);
+                    c.close();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
