@@ -1,23 +1,30 @@
 package jp.conpon.twittanu;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * Created by shigure on 2016/11/19.
  */
 public class TweetActivity extends Activity {
-    private static final int REQUEST_GALLEY = 0;
+    private static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 0;
+
+    private static final int REQUEST_GALLERY = 0;
 
     private EditText tweetContent;
     private Button tweetBtn;
@@ -50,19 +57,47 @@ public class TweetActivity extends Activity {
         imageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(ContextCompat.checkSelfPermission(BaseActivity.context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    if(ActivityCompat.shouldShowRequestPermissionRationale(TweetActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                        ActivityCompat.requestPermissions(
+                                TweetActivity.this,
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                REQUEST_CODE_WRITE_EXTERNAL_STORAGE);
+                    }
+                    else {
+                        Toast.makeText(TweetActivity.this, getResources().getString(R.string.permission_off_storage), Toast.LENGTH_SHORT).show();
+                    }
+                    return;
+                }
+
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_PICK);
                 intent.setType("image/*");
-                startActivityForResult(intent, REQUEST_GALLEY);
+                startActivityForResult(intent, REQUEST_GALLERY);
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults){
+        switch(requestCode) {
+            case REQUEST_CODE_WRITE_EXTERNAL_STORAGE:
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    imageBtn.performClick();
+                }
+                break;
+
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                break;
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK && requestCode == REQUEST_GALLEY) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_GALLERY) {
             try {
                 String path;
                 Uri uri = data.getData();

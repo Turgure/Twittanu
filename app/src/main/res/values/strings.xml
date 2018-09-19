@@ -11,4 +11,6 @@
     <string name="append_image">画像を添付</string>
     <string name="send_tweet">ツイートしたよ！</string>
     <string name="failure_tweet">ツイート失敗…</string>
+
+    <string name="permission_off_storage">ストレージ参照を許可してください。</string>
 </resources>
