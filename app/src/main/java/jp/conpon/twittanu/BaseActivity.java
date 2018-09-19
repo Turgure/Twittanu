@@ -19,7 +19,7 @@ public abstract class BaseActivity extends Activity {
     /**
      * 共通contextの取得
      *
-     * @return
+     * @return get common context
      */
     @Override
     public Context getApplicationContext() {

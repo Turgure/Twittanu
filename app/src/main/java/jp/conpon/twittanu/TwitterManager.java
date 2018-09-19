@@ -34,7 +34,7 @@ public enum TwitterManager {
      * コンストラクタ
      * ツイッター情報を取得
      */
-    private TwitterManager() {
+    TwitterManager() {
         callbackURL = context.getString(R.string.twitter_callback_url);
 
         initTwitterInstance();
@@ -77,8 +77,7 @@ public enum TwitterManager {
     /**
      * ツイート！
      *
-     * @param str
-     * @return
+     * @param str tweet content
      */
     public void tweet(final String str, final UrlImageView[] imageViews) {
         TweetTask task = new TweetTask(str, imageViews);
@@ -88,7 +87,7 @@ public enum TwitterManager {
     /**
      * ログインしているかを確認
      *
-     * @return
+     * @return is logged in
      */
     public boolean isLoggedIn() {
         return accessToken != null;
@@ -96,8 +95,6 @@ public enum TwitterManager {
 
     /**
      * Twitterインスタンス初期化
-     *
-     * @return
      */
     private void initTwitterInstance() {
         String consumerKey = context.getString(R.string.api_key);
@@ -118,7 +115,7 @@ public enum TwitterManager {
     /**
      * OAuth認証が成功した後MainActivityに戻る
      *
-     * @param accessToken
+     * @param accessToken twitter access token
      */
     private void successOAuth(Activity activity, AccessToken accessToken) {
         storeAccessToken(accessToken);
@@ -130,7 +127,7 @@ public enum TwitterManager {
     /**
      * アクセストークンをプリファレンスに保存
      *
-     * @param accessToken
+     * @param accessToken twitter access token
      */
     private void storeAccessToken(AccessToken accessToken) {
         MyPreference.INSTANCE.put(MyPreference.TWITTER_ACCESS_TOKEN, accessToken.getToken());
@@ -139,8 +136,6 @@ public enum TwitterManager {
 
     /**
      * アクセストークンをプリファレンスから読み込み
-     *
-     * @return
      */
     private void loadAccessToken() {
         String token = MyPreference.INSTANCE.get(MyPreference.TWITTER_ACCESS_TOKEN, null);
@@ -155,20 +150,10 @@ public enum TwitterManager {
     /**
      * toastの生成
      *
-     * @param text
-     */
-    private void showToast(String text) {
-        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * toastの生成(resource idから文字列取得)
-     *
-     * @param id
+     * @param id resource id
      */
     private void showToast(int id) {
-        String text = context.getResources().getString(id);
-        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, id, Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -248,7 +233,6 @@ public enum TwitterManager {
 
         @Override
         protected Boolean doInBackground(String... strings) {
-            twitter4j.Status status = null;
             StatusUpdate statusUpdate = new StatusUpdate(text);
 
             try {
@@ -267,7 +251,7 @@ public enum TwitterManager {
                 }
                 statusUpdate.setMediaIds(arrayMediaIds);
 
-                status = INSTANCE.twitter.updateStatus(statusUpdate);
+                INSTANCE.twitter.updateStatus(statusUpdate);
                 return true;
             } catch (TwitterException e) {
                 e.printStackTrace();
@@ -284,5 +268,5 @@ public enum TwitterManager {
                 INSTANCE.showToast(R.string.failure_tweet);
             }
         }
-    };
+    }
 }

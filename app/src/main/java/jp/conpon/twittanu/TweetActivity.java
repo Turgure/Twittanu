@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
@@ -65,7 +66,7 @@ public class TweetActivity extends Activity {
                                 REQUEST_CODE_WRITE_EXTERNAL_STORAGE);
                     }
                     else {
-                        Toast.makeText(TweetActivity.this, getResources().getString(R.string.permission_off_storage), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TweetActivity.this, R.string.permission_off_storage, Toast.LENGTH_SHORT).show();
                     }
                     return;
                 }
@@ -79,7 +80,7 @@ public class TweetActivity extends Activity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults){
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults){
         switch(requestCode) {
             case REQUEST_CODE_WRITE_EXTERNAL_STORAGE:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -98,12 +99,10 @@ public class TweetActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK && requestCode == REQUEST_GALLERY) {
-            try {
-                String path;
-                Uri uri = data.getData();
-
-                if(uri != null) {
-                    Cursor c = this.getContentResolver().query(uri, new String[]{MediaStore.Images.Media.DATA}, null, null, null);
+            Uri uri = data.getData();
+            if(uri != null) {
+                try (Cursor c = this.getContentResolver().query(uri, new String[]{MediaStore.Images.Media.DATA}, null, null, null)) {
+                    String path;
                     if (c != null && c.moveToFirst()) {
                         path = c.getString(0);
                         for (UrlImageView image : images) {
@@ -116,9 +115,9 @@ public class TweetActivity extends Activity {
                         tweetBtn.setEnabled(true);
                     }
                     c.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     }

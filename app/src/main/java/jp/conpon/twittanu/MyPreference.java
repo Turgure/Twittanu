@@ -22,13 +22,13 @@ public enum MyPreference {
     /**
      * コンストラクタ
      */
-    private MyPreference() {
+    MyPreference() {
         sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
     /**
-     * @param key
-     * @param value
+     * @param key preference key
+     * @param value preference value
      */
     public void put(String key, int value) {
         SharedPreferences.Editor edit = sharedPreferences.edit();
@@ -37,8 +37,8 @@ public enum MyPreference {
     }
 
     /**
-     * @param key
-     * @param value
+     * @param key preference key
+     * @param value preference value
      */
     public void put(String key, float value) {
         SharedPreferences.Editor edit = sharedPreferences.edit();
@@ -47,8 +47,8 @@ public enum MyPreference {
     }
 
     /**
-     * @param key
-     * @param value
+     * @param key preference key
+     * @param value preference value
      */
     public void put(String key, boolean value) {
         SharedPreferences.Editor edit = sharedPreferences.edit();
@@ -57,8 +57,8 @@ public enum MyPreference {
     }
 
     /**
-     * @param key
-     * @param value
+     * @param key preference key
+     * @param value preference value
      */
     public void put(String key, String value) {
         SharedPreferences.Editor edit = sharedPreferences.edit();
@@ -67,8 +67,8 @@ public enum MyPreference {
     }
 
     /**
-     * @param key
-     * @param defvalue
+     * @param key preference key
+     * @param defvalue default value
      * @return キーが存在しないときデフォルト値を返す
      */
     public int get(String key, int defvalue) {
@@ -76,8 +76,8 @@ public enum MyPreference {
     }
 
     /**
-     * @param key
-     * @param defvalue
+     * @param key preference key
+     * @param defvalue default value
      * @return キーが存在しないときデフォルト値を返す
      */
     public float get(String key, float defvalue) {
@@ -85,8 +85,8 @@ public enum MyPreference {
     }
 
     /**
-     * @param key
-     * @param defvalue
+     * @param key preference key
+     * @param defvalue default value
      * @return キーが存在しないときデフォルト値を返す
      */
     public boolean get(String key, boolean defvalue) {
@@ -94,8 +94,8 @@ public enum MyPreference {
     }
 
     /**
-     * @param key
-     * @param defvalue
+     * @param key preference key
+     * @param defvalue default value
      * @return キーが存在しないときデフォルト値を返す
      */
     public String get(String key, String defvalue) {

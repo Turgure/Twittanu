@@ -8,20 +8,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <EditText
+            android:id="@+id/tweet_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/tweet_content"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:ems="10"
-                android:gravity="top|start"
-                android:hint="@string/tweet_message_hint"
-                android:inputType="textMultiLine" />
-        </LinearLayout>
+            android:layout_height="200dp"
+            android:ems="10"
+            android:gravity="top|start"
+            android:hint="@string/tweet_message_hint"
+            android:inputType="textMultiLine" />
 
         <GridLayout
             android:layout_width="match_parent"
