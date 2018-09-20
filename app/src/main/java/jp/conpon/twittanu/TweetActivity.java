@@ -114,7 +114,6 @@ public class TweetActivity extends Activity {
                         }
                         tweetBtn.setEnabled(true);
                     }
-                    c.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
