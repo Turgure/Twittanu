@@ -58,16 +58,11 @@ public class TweetActivity extends Activity {
         imageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(ContextCompat.checkSelfPermission(BaseActivity.context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    if(ActivityCompat.shouldShowRequestPermissionRationale(TweetActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        ActivityCompat.requestPermissions(
-                                TweetActivity.this,
-                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                REQUEST_CODE_WRITE_EXTERNAL_STORAGE);
-                    }
-                    else {
-                        Toast.makeText(TweetActivity.this, R.string.permission_off_storage, Toast.LENGTH_SHORT).show();
-                    }
+                if(ContextCompat.checkSelfPermission(TweetActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(
+                            TweetActivity.this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            REQUEST_CODE_WRITE_EXTERNAL_STORAGE);
                     return;
                 }
 
@@ -85,6 +80,9 @@ public class TweetActivity extends Activity {
             case REQUEST_CODE_WRITE_EXTERNAL_STORAGE:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     imageBtn.performClick();
+                }
+                else {
+                    Toast.makeText(TweetActivity.this, R.string.permission_off_storage, Toast.LENGTH_SHORT).show();
                 }
                 break;
 
