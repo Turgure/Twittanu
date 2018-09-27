@@ -3,18 +3,19 @@ package jp.conpon.twittanu;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.URL;
 
 /**
  * Created by shigure on 2017/03/06.
  */
-public class UrlImageView extends AppCompatImageView {
+
+public class UrlImageView extends android.support.v7.widget.AppCompatImageView {
     private String url = null;
     private Bitmap bitmap;
 
@@ -37,15 +38,8 @@ public class UrlImageView extends AppCompatImageView {
     public void setImage(@NonNull String url, double scale) {
         this.url = url;
         if (url.startsWith("http")) {
-            InputStream inputStream = null;
-            try {
-                inputStream = new URL(url).openStream();
-                bitmap = BitmapFactory.decodeStream(inputStream);
-                changeScale(scale);
-                inputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            SetImageTask task = new SetImageTask(this);
+            task.execute(url, String.valueOf(scale));
         } else {
             bitmap = BitmapFactory.decodeFile(url);
             changeScale(scale);
@@ -63,5 +57,35 @@ public class UrlImageView extends AppCompatImageView {
 
     public Bitmap getBitmap() {
         return bitmap;
+    }
+
+    /**
+     * 画像配置用AsyncTask
+     */
+    static class SetImageTask extends AsyncTask<String, Void, Double> {
+        private WeakReference<UrlImageView> urlImageViewWeakReference;
+
+        SetImageTask(UrlImageView urlImageView){
+            urlImageViewWeakReference = new WeakReference<>(urlImageView);
+        }
+
+        @Override
+        protected Double doInBackground(String... strings) {
+            InputStream inputStream;
+            try {
+                inputStream = new URL(strings[0]).openStream();
+                urlImageViewWeakReference.get().bitmap = BitmapFactory.decodeStream(inputStream);
+                inputStream.close();
+                return Double.parseDouble(strings[1]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return 1.0;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Double scale){
+            urlImageViewWeakReference.get().changeScale(scale);
+        }
     }
 }
