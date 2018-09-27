@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">Twittanu</string>
-    <string name="twitter_callback_url">twittanu://twitter</string>
+    <string name="twitter_callback_url">twittanu://</string>
+
+    <string name="success_authorize">認証成功！</string>
+    <string name="failure_authorize">認証失敗。。。</string>
+    <string name="login_message">ログインしました！</string>
+
+    <string name="tweet_message_hint">いまどうしてる？</string>
+    <string name="tweet_button">ツイート</string>
+    <string name="append_image">画像を添付</string>
+    <string name="send_tweet">ツイートしたよ！</string>
+    <string name="failure_tweet">ツイート失敗…</string>
+
+    <string name="permission_off_storage">ストレージ参照を許可してください。</string>
 </resources>

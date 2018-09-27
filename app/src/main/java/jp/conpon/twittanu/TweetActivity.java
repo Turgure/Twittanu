@@ -1,35 +1,36 @@
 package jp.conpon.twittanu;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
-
-import java.io.File;
 
 /**
  * Created by shigure on 2016/11/19.
  */
 public class TweetActivity extends Activity {
-    private static final int REQUEST_GALLEY = 0;
+    private static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 0;
+
+    private static final int REQUEST_GALLERY = 0;
 
     private EditText tweetContent;
     private Button tweetBtn;
     private Button imageBtn;
-    private ImageView image;
-    private String imagePath = null;
+    private UrlImageView[] images;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +40,17 @@ public class TweetActivity extends Activity {
         tweetContent = (EditText) findViewById(R.id.tweet_content);
         tweetBtn = (Button) findViewById(R.id.tweet_button);
         imageBtn = (Button) findViewById(R.id.tweet_image_button);
-        image = (ImageView) findViewById(R.id.tweet_image);
+        images = new UrlImageView[4];
+        for (int i = 0; i < 4; ++i) {
+            images[i] = (UrlImageView) findViewById(getResources().getIdentifier("tweet_image" + (i + 1), "id", getPackageName()));
+        }
 
         tweetContent.addTextChangedListener(watcher);
 
         tweetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TwitterManager.INSTANCE.tweet(tweetContent.getText().toString(), imagePath);
+                TwitterManager.INSTANCE.tweet(tweetContent.getText().toString(), images);
                 finish();
             }
         });
@@ -54,34 +58,63 @@ public class TweetActivity extends Activity {
         imageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(ContextCompat.checkSelfPermission(TweetActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(
+                            TweetActivity.this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            REQUEST_CODE_WRITE_EXTERNAL_STORAGE);
+                    return;
+                }
+
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_PICK);
                 intent.setType("image/*");
-                startActivityForResult(intent, REQUEST_GALLEY);
+                startActivityForResult(intent, REQUEST_GALLERY);
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults){
+        switch(requestCode) {
+            case REQUEST_CODE_WRITE_EXTERNAL_STORAGE:
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    imageBtn.performClick();
+                }
+                else {
+                    Toast.makeText(TweetActivity.this, R.string.permission_off_storage, Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                break;
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == RESULT_OK && requestCode == REQUEST_GALLEY){
-            try{
-                String[] projection = {MediaStore.Images.Media.DATA};
-                Cursor c = this.getContentResolver().query(data.getData(), projection, null, null, null);
-                if(c.moveToFirst()) {
-                    imagePath = c.getString(0);
+        if (resultCode == RESULT_OK && requestCode == REQUEST_GALLERY) {
+            Uri uri = data.getData();
+            if(uri != null) {
+                try (Cursor c = this.getContentResolver().query(uri, new String[]{MediaStore.Images.Media.DATA}, null, null, null)) {
+                    String path;
+                    if (c != null && c.moveToFirst()) {
+                        path = c.getString(0);
+                        for (UrlImageView image : images) {
+                            if (image.getUrl() == null) {
+                                image.setImage(path);
+                                image.changeScale(Resources.getSystem().getDisplayMetrics().widthPixels / 2.0 / image.getBitmap().getWidth());
+                                break;
+                            }
+                        }
+                        tweetBtn.setEnabled(true);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-                Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(data.getData()));
-                double scale = Resources.getSystem().getDisplayMetrics().widthPixels / 4.0 / bitmap.getWidth();
-                bitmap = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth() * scale), (int)(bitmap.getHeight() * scale), true);
-                image.setImageBitmap(bitmap);
-
-                tweetBtn.setEnabled(true);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     }
@@ -97,7 +130,7 @@ public class TweetActivity extends Activity {
 
         @Override
         public void afterTextChanged(Editable s) {
-            if(imagePath == null) {
+            if (images[0].getUrl() == null) {
                 if (tweetBtn.isEnabled()) {
                     if (s.length() == 0) {
                         tweetBtn.setEnabled(false);
@@ -107,8 +140,7 @@ public class TweetActivity extends Activity {
                         tweetBtn.setEnabled(true);
                     }
                 }
-            }
-            else {
+            } else {
                 tweetBtn.setEnabled(true);
             }
         }
