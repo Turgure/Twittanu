@@ -4,8 +4,9 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.ListView;
 
 import java.lang.ref.WeakReference;
 
@@ -22,8 +23,9 @@ public class TimelineActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
 
-        adapter = new TimelineAdapter(this, R.layout.view_timeline_item);
-        ListView timeline = (ListView) findViewById(R.id.timeline);
+        adapter = new TimelineAdapter();
+        RecyclerView timeline = (RecyclerView) findViewById(R.id.timeline);
+        timeline.setLayoutManager(new LinearLayoutManager(this));
         timeline.setAdapter(adapter);
     }
 
