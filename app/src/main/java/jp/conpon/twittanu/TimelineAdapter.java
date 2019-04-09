@@ -3,7 +3,6 @@ package jp.conpon.twittanu;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,8 +38,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineItemLayout> {
 
         if (status != null) {
             User user = status.getUser();
-            DisplayMetrics metrics = holder.itemView.getResources().getDisplayMetrics();
-            holder.userIcon.setImage(user.getProfileImageURL(), metrics.density); // 画面密度にあわせて画像拡大
+            holder.userIcon.setImageUrl(user.getProfileImageURL());
 
             StringBuilder builder = new StringBuilder();
             builder.append(user.getName());

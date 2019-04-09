@@ -8,12 +8,12 @@
     android:paddingStart="8dp"
     android:paddingTop="8dp">
 
-    <jp.conpon.twittanu.UrlImageView
+    <jp.conpon.twittanu.UserIconView
         android:id="@+id/user_icon"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:contentDescription="icon"
-        android:scaleType="centerInside"
+        android:scaleType="fitCenter"
         android:src="@mipmap/ic_launcher"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
