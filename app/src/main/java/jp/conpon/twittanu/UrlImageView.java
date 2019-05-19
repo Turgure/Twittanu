@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.media.ExifInterface;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
@@ -44,6 +46,7 @@ public class UrlImageView extends AppCompatImageView {
             this.bitmap = BitmapFactory.decodeFile(url);
         }
 
+        this.bitmap = this.checkBitmapRotation(this.bitmap);
         this.bitmap = this.getSquareBitmap(this.bitmap);
         setImageBitmap(this.bitmap);
     }
@@ -54,6 +57,22 @@ public class UrlImageView extends AppCompatImageView {
 
     public Bitmap getBitmap() {
         return this.bitmap;
+    }
+
+    private Bitmap checkBitmapRotation(@NonNull Bitmap bitmap) {
+        try {
+            ExifInterface exifInterface = new ExifInterface(this.url);
+            int orientationId = Integer.parseInt(exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION));
+            if(orientationId == ExifInterface.ORIENTATION_ROTATE_90) {
+                Matrix matrix = new Matrix();
+                matrix.postRotate(90);
+                bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return bitmap;
     }
 
     private Bitmap getSquareBitmap(@NonNull Bitmap bitmap) {
