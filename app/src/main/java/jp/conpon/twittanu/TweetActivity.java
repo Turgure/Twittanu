@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -106,7 +105,6 @@ public class TweetActivity extends Activity {
                         for (UrlImageView image : images) {
                             if (image.getUrl() == null) {
                                 image.setImage(path);
-                                image.changeScale(Resources.getSystem().getDisplayMetrics().widthPixels / 2.0 / image.getBitmap().getWidth());
                                 break;
                             }
                         }
