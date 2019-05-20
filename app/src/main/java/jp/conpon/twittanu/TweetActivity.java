@@ -40,9 +40,9 @@ public class TweetActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tweet);
 
-        tweetContent = (EditText) findViewById(R.id.tweet_content);
-        tweetBtn = (Button) findViewById(R.id.tweet_button);
-        imageBtn = (Button) findViewById(R.id.tweet_image_button);
+        tweetContent = findViewById(R.id.tweet_content);
+        tweetBtn = findViewById(R.id.tweet_button);
+        imageBtn = findViewById(R.id.tweet_image_button);
         tweetImages = new ArrayList<>();
 
         tweetContent.addTextChangedListener(watcher);
@@ -146,7 +146,7 @@ public class TweetActivity extends Activity {
     };
 
     private void appendImage(@NonNull final String path) {
-        GridLayout gridLayout = (GridLayout) findViewById(R.id.tweet_images);
+        GridLayout gridLayout = findViewById(R.id.tweet_images);
         if(gridLayout.getChildCount() < MAX_TWEET_IMAGE_NUM) {
             UrlImageView urlImageView = new UrlImageView(TweetActivity.this);
             urlImageView.setImage(path);
