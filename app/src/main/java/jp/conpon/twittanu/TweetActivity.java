@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,40 +16,41 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 /**
  * Created by shigure on 2016/11/19.
  */
 public class TweetActivity extends Activity {
     private static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 0;
-
     private static final int REQUEST_GALLERY = 0;
+
+    private static final int MAX_TWEET_IMAGE_NUM = 4;
 
     private EditText tweetContent;
     private Button tweetBtn;
     private Button imageBtn;
-    private UrlImageView[] images;
+    private ArrayList<UrlImageView> tweetImages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tweet);
 
-        tweetContent = (EditText) findViewById(R.id.tweet_content);
-        tweetBtn = (Button) findViewById(R.id.tweet_button);
-        imageBtn = (Button) findViewById(R.id.tweet_image_button);
-        images = new UrlImageView[4];
-        for (int i = 0; i < 4; ++i) {
-            images[i] = (UrlImageView) findViewById(getResources().getIdentifier("tweet_image" + (i + 1), "id", getPackageName()));
-        }
+        tweetContent = findViewById(R.id.tweet_content);
+        tweetBtn = findViewById(R.id.tweet_button);
+        imageBtn = findViewById(R.id.tweet_image_button);
+        tweetImages = new ArrayList<>();
 
         tweetContent.addTextChangedListener(watcher);
 
         tweetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TwitterManager.INSTANCE.tweet(tweetContent.getText().toString(), images);
+                TwitterManager.INSTANCE.tweet(tweetContent.getText().toString(), tweetImages);
                 finish();
             }
         });
@@ -63,6 +63,11 @@ public class TweetActivity extends Activity {
                             TweetActivity.this,
                             new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                             REQUEST_CODE_WRITE_EXTERNAL_STORAGE);
+                    return;
+                }
+
+                if(tweetImages.size() >= MAX_TWEET_IMAGE_NUM) {
+                    Toast.makeText(TweetActivity.this, R.string.append_image_limit_message, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -103,13 +108,7 @@ public class TweetActivity extends Activity {
                     String path;
                     if (c != null && c.moveToFirst()) {
                         path = c.getString(0);
-                        for (UrlImageView image : images) {
-                            if (image.getUrl() == null) {
-                                image.setImage(path);
-                                image.changeScale(Resources.getSystem().getDisplayMetrics().widthPixels / 2.0 / image.getBitmap().getWidth());
-                                break;
-                            }
-                        }
+                        appendImage(path);
                         tweetBtn.setEnabled(true);
                     }
                 } catch (Exception e) {
@@ -130,7 +129,7 @@ public class TweetActivity extends Activity {
 
         @Override
         public void afterTextChanged(Editable s) {
-            if (images[0].getUrl() == null) {
+            if (tweetImages.size() == 0) {
                 if (tweetBtn.isEnabled()) {
                     if (s.length() == 0) {
                         tweetBtn.setEnabled(false);
@@ -145,4 +144,15 @@ public class TweetActivity extends Activity {
             }
         }
     };
+
+    private void appendImage(@NonNull final String path) {
+        GridLayout gridLayout = findViewById(R.id.tweet_images);
+        if(gridLayout.getChildCount() < MAX_TWEET_IMAGE_NUM) {
+            UrlImageView urlImageView = new UrlImageView(TweetActivity.this);
+            urlImageView.setImage(path);
+
+            gridLayout.addView(urlImageView);
+            tweetImages.add(urlImageView);
+        }
+    }
 }

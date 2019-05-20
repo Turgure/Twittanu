@@ -79,7 +79,7 @@ public enum TwitterManager {
      *
      * @param str tweet content
      */
-    public void tweet(final String str, final UrlImageView[] imageViews) {
+    public void tweet(final String str, final ArrayList<UrlImageView> imageViews) {
         TweetTask task = new TweetTask(str, imageViews);
         task.execute();
     }
@@ -224,9 +224,9 @@ public enum TwitterManager {
      */
     static class TweetTask extends AsyncTask<String, Void, Boolean> {
         private String text;
-        private UrlImageView[] urlImageViews;
+        private ArrayList<UrlImageView> urlImageViews;
 
-        TweetTask(final String text, final UrlImageView[] urlImageViews){
+        TweetTask(final String text, final ArrayList<UrlImageView> urlImageViews){
             this.text = text;
             this.urlImageViews = urlImageViews;
         }
