@@ -9,6 +9,7 @@
     <string name="tweet_message_hint">いまどうしてる？</string>
     <string name="tweet_button">ツイート</string>
     <string name="append_image">画像を添付</string>
+    <string name="append_image_limit_message">これ以上画像を添付できません</string>
     <string name="send_tweet">ツイートしたよ！</string>
     <string name="failure_tweet">ツイート失敗…</string>
 
